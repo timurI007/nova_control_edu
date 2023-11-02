@@ -1,0 +1,9 @@
+.contact_block{
+    display: flex;
+    gap: 10px;
+}
+
+.contact_link{
+    font-weight: bold;
+    text-decoration: underline;
+}

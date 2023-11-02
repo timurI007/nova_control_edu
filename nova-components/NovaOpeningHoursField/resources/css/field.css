@@ -1,0 +1,10 @@
+.weekTable .closed {
+  padding-top: 1.125rem;
+  padding-bottom: 1.125rem;
+}
+
+.dark .openingHours input::-webkit-calendar-picker-indicator {
+  -webkit-filter: invert(0.75);
+          filter: invert(0.75);
+}
+/*# sourceMappingURL=field.css.map */
