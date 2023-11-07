@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Config;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,5 +15,5 @@ use Illuminate\Support\Facades\Config;
 
 Route::get('/', function () {
     // return view('welcome');
-    return redirect(Config::get('nova.path'));
+    return redirect(config('nova.path'));
 });

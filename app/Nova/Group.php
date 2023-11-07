@@ -27,7 +27,7 @@ class Group extends Resource
      */
     public function title()
     {
-        return $this->name . '|' . $this->course->name;
+        return $this->name . ' | ' . $this->course->name;
     }
 
     /**
@@ -110,7 +110,7 @@ class Group extends Resource
      */
     public function subtitle()
     {
-        return 'Teacher: ' . $this->teacher->staff->user->name;
+        return $this->teacher->staff->user->name;
     }
 
     /**

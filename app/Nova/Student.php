@@ -5,7 +5,6 @@ namespace App\Nova;
 use App\Nova\DefaultFields\UserFields;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Config;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Fields\Text;
@@ -60,7 +59,7 @@ class Student extends Resource
      */
     public function fields(NovaRequest $request)
     {
-        $nova_path = Config::get('nova.path');
+        $nova_path = config('nova.path');
         return [
             UserFields::userID()->textAlign('left'),
             UserFields::avtProfilePhoto()->textAlign('left'),

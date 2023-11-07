@@ -6,8 +6,6 @@ use App\Nova\DefaultFields\UserFields;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Badge;
-use Laravel\Nova\Fields\Number;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\URL;
@@ -34,7 +32,7 @@ class Teacher extends Resource
      * @var array
      */
     public static $search = [
-        'staff.user.id', 'staff.user.name', 'staff.user.email', 'staff.user.phone'
+        'staff.user_id', 'staff.user.name', 'staff.user.email', 'staff.user.phone'
     ];
 
     /**
@@ -52,19 +50,19 @@ class Teacher extends Resource
      */
     public function fields(NovaRequest $request)
     {
-        $nova_path = Config::get('nova.path');
+        $nova_path = config('nova.path');
         return [
             URL::make('System ID', function () use ($nova_path){
-                return $nova_path. '/resources/users/' . $this->staff->user->id;
+                return $nova_path . '/resources/users/' . $this->staff->user_id;
             })
-                ->displayUsing(fn () => $this->staff->user->id)
+                ->displayUsing(fn () => $this->staff->user_id)
                 ->textAlign('left')
                 ->showWhenPeeking(),
             UserFields::avtProfilePhoto('staff.user.profile_photo')->textAlign('left'),
             UserFields::imgProfilePhoto('staff.user.profile_photo')->textAlign('left'),
 
             URL::make('Staff', function () use ($nova_path){
-                return $nova_path. '/resources/staff/' . $this->staff->id;
+                return $nova_path . '/resources/staff/' . $this->staff->id;
             })
                 ->displayUsing(fn () => $this->staff->user->name)
                 ->textAlign('left')
@@ -87,19 +85,6 @@ class Teacher extends Resource
                 }
                 return $result;
             })->asHtml(),
-
-            Number::make('Number Of Students', function () {
-                $counter = 0;
-                foreach($this->groups as $group)
-                {
-                    $counter += $group->students->count();
-                }
-                return $counter;
-            })->sortable()->textAlign('left'),
-
-            Number::make('Number Of Groups', function () {
-                return $this->groups->count();
-            })->sortable()->textAlign('left'),
             
             Badge::make('Status', function () {
                 return $this->staff->status;
@@ -149,7 +134,9 @@ class Teacher extends Resource
      */
     public function lenses(NovaRequest $request)
     {
-        return [];
+        return [
+            Lenses\TeacherStudents::make(),
+        ];
     }
 
     /**

@@ -10,7 +10,6 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\BelongsTo;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Laravel\Nova\Fields\Text;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Markdown;
@@ -39,7 +38,7 @@ class Staff extends Resource
      * @var array
      */
     public static $search = [
-        'user.id', 'user.name'
+        'user_id', 'user.name'
     ];
 
     /**
@@ -84,6 +83,7 @@ class Staff extends Resource
             UserFields::imgProfilePhoto()->textAlign('left'),
 
             BelongsTo::make('User')
+                ->searchable()
                 ->modalSize('3xl')
                 ->showCreateRelationButton()
                 ->rules('required')
@@ -148,8 +148,7 @@ class Staff extends Resource
             UserFields::userID()->textAlign('left'),
             UserFields::avtProfilePhoto()->textAlign('center'),
 
-            BelongsTo::make('User')
-                ->searchable(),
+            BelongsTo::make('User'),
             
             BelongsTo::make('Position', 'position')
                 ->filterable(),
