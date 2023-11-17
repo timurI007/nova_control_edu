@@ -5,6 +5,7 @@ namespace App\Nova\DefaultFields;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\UiAvatar;
 
 class UserFields
 {
@@ -18,8 +19,11 @@ class UserFields
 
     public static function avtProfilePhoto($attribute = 'user.profile_photo')
     {
-        return Avatar::make('Profile Photo', $attribute)
-            ->path('user/avatar')
+        // return Avatar::make('Profile Photo', $attribute)
+        //     ->path('user/avatar')
+        //     ->indexWidth(50)
+        //     ->onlyOnIndex();
+        return UiAvatar::make()
             ->indexWidth(50)
             ->onlyOnIndex();
     }

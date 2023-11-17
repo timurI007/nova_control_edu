@@ -85,17 +85,13 @@ class Student extends Resource
 
             Text::make('Group / Teacher', function () use($nova_path) {
                 $result = '';
-                $br_need = count($this->groups);
                 foreach($this->groups as $group){
-                    $result .= '<a class="link-default" target="_blank" href="' . $nova_path. '/resources/groups/' . $group->id . '">';
+                    $result .= '<a class="link-default" href="' . $nova_path. '/resources/groups/' . $group->id . '">';
                     $result .= $group->name;
                     $result .= '</a> / ';
-                    $result .= '<a class="link-default" target="_blank" href="' . $nova_path. '/resources/teachers/' . $group->teacher->id . '">';
+                    $result .= '<a class="link-default" href="' . $nova_path. '/resources/teachers/' . $group->teacher->id . '">';
                     $result .= $group->teacher->staff->user->name;
-                    $result .= '</a>';
-                    if($br_need){
-                        $result .= '<br>';
-                    }
+                    $result .= '</a><br>';
                 }
                 return $result;
             })->asHtml()->textAlign('left')->exceptOnForms(),
@@ -121,10 +117,12 @@ class Student extends Resource
                 ->fullWidth(),
             
             MorphOne::make('Address', 'address', Address::class)
+                ->onlyOnForms()
                 ->required(),
 
             BelongsToMany::make('Groups', 'groups', Group::class)
                 ->searchable()
+                ->filterable()
                 ->withSubtitles()
         ];
     }
@@ -180,6 +178,8 @@ class Student extends Resource
      */
     public function actions(NovaRequest $request)
     {
-        return [];
+        return [
+            new Actions\AddStudentsToGroup
+        ];
     }
 }

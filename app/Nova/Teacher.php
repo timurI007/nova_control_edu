@@ -81,7 +81,7 @@ class Teacher extends Resource
                 {
                     $result .= '<a class="link-default" href="' . $nova_path. '/resources/courses/' . $group->course->id . '">';
                     $result .= $group->course->name;
-                    $result .= '</a>';
+                    $result .= '</a><br>';
                 }
                 return $result;
             })->asHtml(),

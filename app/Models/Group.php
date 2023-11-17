@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Builder;
 
 class Group extends Model
 {
@@ -17,6 +18,13 @@ class Group extends Model
      * @var string
      */
     protected $table = 'groups';
+    
+    protected static function booted()
+    {
+        static::addGlobalScope('with-student-count', function (Builder $builder) {
+            $builder->withCount('students');
+        });
+    }
 
     // Relationships
 

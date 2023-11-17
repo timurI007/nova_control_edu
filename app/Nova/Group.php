@@ -72,10 +72,6 @@ class Group extends Resource
                 ->rules('required')
                 ->filterable(),
             
-            Number::make('Number Of Students', function () {
-                return $this->students->count();
-            })->sortable()->exceptOnForms()->textAlign('left'),
-            
             BelongsTo::make('Course')
                 ->rules('required')
                 ->filterable(),
@@ -98,6 +94,11 @@ class Group extends Resource
                 ])->default('Recruitment')
                 ->onlyOnForms()
                 ->rules('required'),
+            
+            Number::make('Number Of Students', 'students_count')
+                ->sortable()
+                ->exceptOnForms()
+                ->textAlign('left'),
             
             BelongsToMany::make('Students', 'students', Student::class)
         ];

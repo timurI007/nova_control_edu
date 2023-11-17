@@ -10,6 +10,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\UiAvatar;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class User extends Resource
@@ -48,11 +49,15 @@ class User extends Resource
         return [
             ID::make()->sortable(),
 
-            Avatar::make('Profile Photo', 'profile_photo')
-                ->path('user/avatar')
+            // Avatar::make('Profile Photo', 'profile_photo')
+            //     ->path('user/avatar')
+            //     ->indexWidth(50)
+            //     ->onlyOnIndex()
+            //     ->prunable(),
+
+            UiAvatar::make()
                 ->indexWidth(50)
-                ->onlyOnIndex()
-                ->prunable(),
+                ->onlyOnIndex(),
 
             Image::make('Profile Photo', 'profile_photo')
                 ->path('user/avatar')

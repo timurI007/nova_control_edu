@@ -55,7 +55,6 @@ class TeacherStudents extends Lens
             'teachers.id',
             'users.id as user_id',
             'staff.id as staff_id',
-            'users.profile_photo',
             'users.name as user_name',
             DB::raw('count(distinct students.id) AS total_students'),
             DB::raw('count(distinct groups.id) AS total_groups'),
@@ -77,8 +76,6 @@ class TeacherStudents extends Lens
             })
                 ->displayUsing(fn () => $this->user_id)
                 ->textAlign('left'),
-            
-            UserFields::avtProfilePhoto('profile_photo')->textAlign('left'),
 
             URL::make('Staff', function () use ($nova_path){
                 return $nova_path . '/resources/staff/' . $this->staff_id;

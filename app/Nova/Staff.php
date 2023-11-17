@@ -130,6 +130,7 @@ class Staff extends Resource
                 ->fullWidth(),
             
             MorphOne::make('Address', 'address', Address::class)
+                ->onlyOnForms()
                 ->required(),
         ];
     }
