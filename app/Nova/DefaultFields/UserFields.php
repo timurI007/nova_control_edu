@@ -17,13 +17,13 @@ class UserFields
             ->hideWhenUpdating();
     }
 
-    public static function avtProfilePhoto($attribute = 'user.profile_photo')
+    public static function avtProfilePhoto($attribute = 'user.name')
     {
         // return Avatar::make('Profile Photo', $attribute)
         //     ->path('user/avatar')
         //     ->indexWidth(50)
         //     ->onlyOnIndex();
-        return UiAvatar::make()
+        return UiAvatar::make('Avatar', $attribute)
             ->indexWidth(50)
             ->onlyOnIndex();
     }

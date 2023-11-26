@@ -58,7 +58,8 @@ class Teacher extends Resource
                 ->displayUsing(fn () => $this->staff->user_id)
                 ->textAlign('left')
                 ->showWhenPeeking(),
-            UserFields::avtProfilePhoto('staff.user.profile_photo')->textAlign('left'),
+            // UserFields::avtProfilePhoto('staff.user.profile_photo')->textAlign('left'),
+            UserFields::avtProfilePhoto('staff.user.name')->textAlign('left'),
             UserFields::imgProfilePhoto('staff.user.profile_photo')->textAlign('left'),
 
             URL::make('Staff', function () use ($nova_path){
@@ -77,11 +78,16 @@ class Teacher extends Resource
             
             Text::make('Courses', function () use ($nova_path) {
                 $result = '';
+                $added_courses = array();
                 foreach($this->groups as $group)
                 {
+                    if(in_array($group->course->id, $added_courses)){
+                        continue;
+                    }
                     $result .= '<a class="link-default" href="' . $nova_path. '/resources/courses/' . $group->course->id . '">';
                     $result .= $group->course->name;
                     $result .= '</a><br>';
+                    $added_courses[] = $group->course->id;
                 }
                 return $result;
             })->asHtml(),
@@ -102,6 +108,16 @@ class Teacher extends Resource
             
             HasMany::make('Groups', 'groups', Group::class)
         ];
+    }
+
+    /**
+     * Get the search result subtitle for the resource.
+     *
+     * @return string
+     */
+    public function subtitle()
+    {
+        return $this->staff->status;
     }
 
     /**

@@ -6,8 +6,29 @@ use DateTime;
 
 class GlobalVariable
 {
+    // Database
     public static $positions = [ // 'name' => id
         'teacher' => 1
+    ];
+
+    // Changeable
+    public static $groups_status = [
+        0, // recruitment
+        1, // studying
+        2, // suspended
+        3, // finished
+    ];
+    public static $groups_labels = [
+        'Recruitment',
+        'Studying',
+        'Suspended',
+        'Finished',
+    ];
+    public static $groups_styles = [
+        'info', // recruitment
+        'success', // studying
+        'warning', // suspended
+        'info', // finished
     ];
 
     // Methods
@@ -30,5 +51,27 @@ class GlobalVariable
             }
         }
         return false;
+    }
+
+    /**
+     * Gets group statuses optional
+     */
+    public static function get_group_status_optional(){
+        $res = array();
+        foreach(self::$groups_status as $i){
+            $res[$i] = self::$groups_labels[$i];
+        }
+        return $res;
+    }
+
+    /**
+     * Gets group statuses STYLES optional
+     */
+    public static function get_group_styles_optional(){
+        $res = array();
+        foreach(self::$groups_status as $i){
+            $res[$i] = self::$groups_styles[$i];
+        }
+        return $res;
     }
 }

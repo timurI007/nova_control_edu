@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Classes\GlobalVariable;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Badge;
 use Laravel\Nova\Fields\BelongsTo;
@@ -51,7 +52,20 @@ class Group extends Resource
      *
      * @var array
      */
-    public static $with = ['teacher', 'students', 'course'];
+    public static $with = ['teacher', 'students', 'course', 'teacher.staff.user'];
+
+    /**
+	 * Apply any applicable orderings to the query.
+	 *
+	 * @param  \Illuminate\Database\Eloquent\Builder  $query
+	 * @param  array<string, string>  $orderings
+	 * @return \Illuminate\Database\Eloquent\Builder
+	 */
+	protected static function applyOrderings($query, array $orderings)
+	{
+        $orderings['status'] = 'asc';
+		return parent::applyOrderings($query, $orderings);
+	}
 
     /**
      * Get the fields displayed by the resource.
@@ -70,6 +84,8 @@ class Group extends Resource
 
             BelongsTo::make('Teacher')
                 ->rules('required')
+                ->searchable()                
+                ->withSubtitles()
                 ->filterable(),
             
             BelongsTo::make('Course')
@@ -77,21 +93,16 @@ class Group extends Resource
                 ->filterable(),
             
             Badge::make('Status')
-                ->map([
-                    'Recruitment' => 'info',
-                    'Studying' => 'success',
-                    'Suspended' => 'warning',
-                    'Finished' => 'info',
-                ])
+                ->map(GlobalVariable::get_group_styles_optional())
+                ->label(function ($value) {
+                    return GlobalVariable::$groups_labels[$value];
+                })
                 ->filterable()
                 ->withIcons(),
             
-            Select::make('Status')->options([
-                    'Recruitment' => 'Recruitment',
-                    'Studying' => 'Studying',
-                    'Suspended' => 'Suspended',
-                    'Finished' => 'Finished',
-                ])->default('Recruitment')
+            Select::make('Status')
+                ->options(GlobalVariable::get_group_status_optional())
+                ->default('Recruitment')
                 ->onlyOnForms()
                 ->rules('required'),
             

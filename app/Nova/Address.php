@@ -17,14 +17,11 @@ class Address extends Resource
     public static $model = \App\Models\Address::class;
 
     /**
-     * Get the value that should be displayed to represent the resource.
+     * The single value that should be used to represent the resource when being displayed.
      *
-     * @return string
+     * @var string
      */
-    public function title()
-    {
-        return $this->city . ', ' . $this->district . ', ' . $this->street . ', ' . $this->housing;
-    }
+    public static $title = 'addressable.user.name';
 
     /**
      * The columns that should be searched.
@@ -32,7 +29,8 @@ class Address extends Resource
      * @var array
      */
     public static $search = [
-        'city', 'district', 'street'
+        'addressable.user.id',
+        'addressable.user.name'
     ];
 
     /**
@@ -44,10 +42,15 @@ class Address extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            MorphTo::make('addressable')->types([
-                Staff::class,
-                Student::class,
-            ]),
+            MorphTo::make('addressable')
+                ->types([
+                    Staff::class,
+                    Student::class,
+                ])
+                ->default(2)
+                ->defaultResource(Student::class)
+                ->searchable()
+                ->withSubtitles(),
 
             Text::make('City', 'city')
                 ->rules('max:30'),

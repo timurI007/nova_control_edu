@@ -56,9 +56,8 @@ class AddStudentsToGroup extends Action
         $groupId = $fields->group;
         $group = \App\Models\Group::findOrFail($groupId);
         $studentIds = $models->pluck('id')->toArray();
-        // Добавляем студентов в выбранную группу, игнорируя уже принадлежащих студентов
         $group->students()->syncWithoutDetaching($studentIds);
-        return Action::message('Students added to the group successfully!');
+        return Action::message(count($studentIds) . ' students added to the group successfully!');
     }
 
     /**
@@ -69,10 +68,18 @@ class AddStudentsToGroup extends Action
      */
     public function fields(NovaRequest $request)
     {
+        $groups = \App\Models\Group::with(['teacher.staff.user', 'course'])->get();
+        $formattedGroups = [];
+        foreach ($groups as $group) {
+            $formattedGroups[$group->id] = [
+                'label' => $group->teacher->staff->user->name,
+                'group' => $group->name  . ' (' . $group->course->name . ')'
+            ];
+        }
         return [
             Select::make('Group')
                 ->searchable()
-                ->options(\App\Models\Group::pluck('name', 'id')->toArray())
+                ->options($formattedGroups)
                 ->displayUsingLabels()
                 ->rules('required')
         ];

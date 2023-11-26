@@ -36,7 +36,15 @@ class TestSeeder extends Seeder
         \App\Models\Staff::factory()->count(10)->create([
             'position_id' => 1,
             'department_id' => 1
-        ]);
+        ])->each(function ($staff) {
+            \App\Models\Group::factory()->count(random_int(1, 4))->create([
+                'course_id' => random_int(1, 9),
+                'teacher_id' => $staff->id,
+            ])->each(function ($group) {
+                $students = \App\Models\Student::factory()->count(random_int(10, 14))->create()->pluck('id')->toArray();
+                $group->students()->attach($students);
+            });
+        });
     }
 
     function getDepartments() : array {

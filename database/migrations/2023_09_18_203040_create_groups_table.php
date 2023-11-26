@@ -18,12 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('course_id');
             $table->unsignedBigInteger('teacher_id');
             $table->string('name', 10);
-            $table->set('status', [
-                'Recruitment',
-                'Studying',
-                'Suspended',
-                'Finished'
-            ])->default('Recruitment');
+            $table->unsignedTinyInteger('status')->default(1);
             $table->string('comment', 255)->nullable();
             $table->timestamps();
 

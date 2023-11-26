@@ -35,7 +35,10 @@ class TeacherStudents extends Lens
     {
         return $request->withoutTableOrderPrefix()->withOrdering($request->withFilters(
             $query->select(self::columns())
-                ->leftJoin('groups', 'teachers.id', '=', 'groups.teacher_id')
+                ->leftJoin('groups', function ($join) {
+                    $join->on('teachers.id', '=', 'groups.teacher_id')
+                        ->where('groups.status', '=', 1);
+                })
                 ->leftJoin('groups_students', 'groups.id', '=', 'groups_students.group_id')
                 ->leftJoin('students', 'groups_students.student_id', '=', 'students.id')
                 ->join('staff', 'teachers.staff_id', '=', 'staff.id')
@@ -56,8 +59,8 @@ class TeacherStudents extends Lens
             'users.id as user_id',
             'staff.id as staff_id',
             'users.name as user_name',
-            DB::raw('count(distinct students.id) AS total_students'),
-            DB::raw('count(distinct groups.id) AS total_groups'),
+            DB::raw('coalesce(count(distinct students.id), 0) AS total_students'),
+            DB::raw('coalesce(count(distinct groups.id), 0) AS total_groups'),
         ];
     }
 
@@ -83,9 +86,9 @@ class TeacherStudents extends Lens
                 ->displayUsing(fn () => $this->user_name)
                 ->textAlign('left'),
 
-            Number::make('Number Of Groups', 'total_groups')->sortable()->textAlign('left'),
+            Number::make('Active Groups', 'total_groups')->sortable()->textAlign('left'),
 
-            Number::make('Number Of Students', 'total_students')->sortable()->textAlign('left'),
+            Number::make('Active Students', 'total_students')->sortable()->textAlign('left'),
             
         ];
     }
