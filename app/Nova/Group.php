@@ -37,7 +37,7 @@ class Group extends Resource
      * @var array
      */
     public static $search = [
-        'name', 'course.name'
+        'name', 'teacher.staff.user.name'
     ];
 
     /**
