@@ -102,7 +102,7 @@ class Group extends Resource
             
             Select::make('Status')
                 ->options(GlobalVariable::get_group_status_optional())
-                ->default('Recruitment')
+                ->default(GlobalVariable::$groups_status[0])
                 ->onlyOnForms()
                 ->rules('required'),
             

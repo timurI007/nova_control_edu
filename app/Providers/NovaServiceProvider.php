@@ -16,7 +16,9 @@ use App\Nova\Group;
 use App\Nova\Position;
 use App\Nova\Staff;
 use App\Nova\Department;
+use App\Nova\Equipment;
 use App\Nova\Lenses\TeacherStudents;
+use App\Nova\Room;
 use App\Nova\Student;
 use App\Nova\Teacher;
 use App\Nova\User;
@@ -145,6 +147,11 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 MenuSection::make('Departments', $result_departments)
                     ->icon('template')
                     ->collapsable(),
+
+                MenuSection::make('Configuration', [
+                    MenuItem::resource(Room::class),
+                    MenuItem::resource(Equipment::class),
+                ])->icon('adjustments')->collapsable(),
                 
                 MenuSection::make('Other Data', [
                     MenuItem::resource(Address::class),

@@ -1,5 +1,5 @@
 <div class="contact_block">
-    <div>
+    <div class="contact_labels">
         Phone:
         <br>
         Email:

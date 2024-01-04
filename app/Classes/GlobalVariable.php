@@ -31,6 +31,19 @@ class GlobalVariable
         'info', // finished
     ];
 
+    public static $rooms_status = [
+        0, // active
+        1, // not active
+    ];
+    public static $rooms_labels = [
+        'Active',
+        'Not Active',
+    ];
+    public static $rooms_styles = [
+        'success', // active
+        'danger', // not active
+    ];
+
     // Methods
 
     /**
@@ -54,7 +67,7 @@ class GlobalVariable
     }
 
     /**
-     * Gets group statuses optional
+     * Get group statuses optional
      */
     public static function get_group_status_optional(){
         $res = array();
@@ -65,12 +78,34 @@ class GlobalVariable
     }
 
     /**
-     * Gets group statuses STYLES optional
+     * Get group statuses STYLES optional
      */
     public static function get_group_styles_optional(){
         $res = array();
         foreach(self::$groups_status as $i){
             $res[$i] = self::$groups_styles[$i];
+        }
+        return $res;
+    }
+
+    /**
+     * Get room statuses optional
+     */
+    public static function get_room_status_optional(){
+        $res = array();
+        foreach(self::$rooms_status as $i){
+            $res[$i] = self::$rooms_labels[$i];
+        }
+        return $res;
+    }
+
+    /**
+     * Get room statuses STYLES optional
+     */
+    public static function get_room_styles_optional(){
+        $res = array();
+        foreach(self::$rooms_status as $i){
+            $res[$i] = self::$rooms_styles[$i];
         }
         return $res;
     }

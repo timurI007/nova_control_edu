@@ -2,22 +2,23 @@
 
 namespace App\Nova;
 
+use App\Classes\GlobalVariable;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Badge;
+use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Select;
 
-class Department extends Resource
+class Room extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\StaffCategory>
+     * @var class-string<\App\Models\Room>
      */
-    public static $model = \App\Models\Department::class;
+    public static $model = \App\Models\Room::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -32,7 +33,7 @@ class Department extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name'
+        'name',
     ];
 
     /**
@@ -44,23 +45,44 @@ class Department extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
-
-            Text::make('Name')
-                ->rules('required', 'string', 'max:255')
-                ->creationRules('unique:departments,name')
-                ->updateRules('unique:departments,name,{{resourceId}}'),
-            
-            Number::make('Order')
+            Text::make('Room', 'name')
                 ->sortable()
-                ->default(0)
-                ->rules('required', 'numeric', 'max:1000', 'min:0'),
-
-            Boolean::make('Show on Menu', 'is_published')
+                ->rules('required', 'max:30'),
+            
+            Number::make('Capacity', 'capacity')
+                ->default(10)
+                ->sortable()
+                ->rules('required', 'numeric', 'min:0')
+                ->textAlign('left'),
+            
+            Badge::make('Status')
+                ->map(GlobalVariable::get_room_styles_optional())
+                ->label(function ($value) {
+                    return GlobalVariable::$rooms_labels[$value];
+                })
                 ->filterable()
+                ->withIcons()
+                ->textAlign('left'),
+            
+            Select::make('Status')
+                ->options(GlobalVariable::get_room_status_optional())
+                ->default(GlobalVariable::$rooms_status[0])
+                ->onlyOnForms()
                 ->rules('required'),
             
-            HasMany::make('Users', 'staff', Staff::class)
+            BelongsToMany::make('Equipment', 'equipment', Equipment::class)
+                ->fields(function ($request, $relatedModel) {
+                    return [
+                        Number::make('Amount', 'amount')
+                            ->sortable()
+                            ->default(1)
+                            ->textAlign('center')
+                            ->rules('required', 'numeric', 'min:0', 'max:255'),
+                    ];
+                })
+                ->searchable()
+                ->showCreateRelationButton()
+                ->modalSize('3xl'),
         ];
     }
 

@@ -3,6 +3,10 @@
     gap: 10px;
 }
 
+.contact_labels{
+    text-wrap: nowrap;
+}
+
 .contact_link{
     font-weight: bold;
     text-decoration: underline;

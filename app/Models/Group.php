@@ -18,13 +18,6 @@ class Group extends Model
      * @var string
      */
     protected $table = 'groups';
-    
-    protected static function booted()
-    {
-        static::addGlobalScope('with-student-count', function (Builder $builder) {
-            $builder->withCount('students');
-        });
-    }
 
     // Relationships
 
@@ -41,5 +34,12 @@ class Group extends Model
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class, 'course_id');
+    }
+
+    // Detail attributes
+    
+    public function getStudentsCountAttribute()
+    {
+        return $this->students()->count();
     }
 }

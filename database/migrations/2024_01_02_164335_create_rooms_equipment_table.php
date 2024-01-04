@@ -13,22 +13,20 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('groups', function (Blueprint $table) {
+        Schema::create('rooms_equipment', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('course_id');
-            $table->unsignedBigInteger('teacher_id');
-            $table->string('name', 10)->unique();
-            $table->unsignedTinyInteger('status')->default(0);
-            $table->string('comment', 255)->nullable();
+            $table->unsignedBigInteger('room_id');
+            $table->unsignedBigInteger('equipment_id');
+            $table->unsignedInteger('amount');
             $table->timestamps();
 
-            $table->foreign('course_id')
+            $table->foreign('room_id')
                 ->references('id')
-                ->on('courses')
+                ->on('rooms')
                 ->onDelete('cascade');
-            $table->foreign('teacher_id')
+            $table->foreign('equipment_id')
                 ->references('id')
-                ->on('teachers')
+                ->on('equipment')
                 ->onDelete('cascade');
         });
     }
@@ -40,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('groups');
+        Schema::dropIfExists('rooms_equipment');
     }
 };

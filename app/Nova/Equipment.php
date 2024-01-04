@@ -3,21 +3,21 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Text;
 
-class Department extends Resource
+class Equipment extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\StaffCategory>
+     * @var class-string<\App\Models\Equipment>
      */
-    public static $model = \App\Models\Department::class;
+    public static $model = \App\Models\Equipment::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -32,7 +32,7 @@ class Department extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name'
+        'name',
     ];
 
     /**
@@ -44,23 +44,44 @@ class Department extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
-
-            Text::make('Name')
-                ->rules('required', 'string', 'max:255')
-                ->creationRules('unique:departments,name')
-                ->updateRules('unique:departments,name,{{resourceId}}'),
+            Image::make('Photo', 'photo')
+                ->path('equipment/photo')
+                ->textAlign('left')
+                ->onlyOnIndex()
+                ->maxWidth(50),
             
-            Number::make('Order')
+            Image::make('Photo', 'photo')
+                ->path('equipment/photo')
+                ->rules('image')
+                ->hideFromIndex()
+                ->maxWidth(250),
+            
+            Text::make('Name', 'name')
+                ->textAlign('left')
+                ->rules('required', 'max:50'),
+
+            Number::make('Total', 'amount_sum')
                 ->sortable()
-                ->default(0)
-                ->rules('required', 'numeric', 'max:1000', 'min:0'),
+                ->exceptOnForms()
+                ->textAlign('left')
+                ->hideFromIndex(function () use ($request) {
+                    return $request->viaResource;
+                }),
 
-            Boolean::make('Show on Menu', 'is_published')
-                ->filterable()
-                ->rules('required'),
+            KeyValue::make('Parameters', 'parameters')
+                ->rules('json')
+                ->nullable(),
             
-            HasMany::make('Users', 'staff', Staff::class)
+            BelongsToMany::make('Rooms', 'rooms', Room::class)
+                ->fields(function ($request, $relatedModel) {
+                    return [
+                        Number::make('Amount', 'amount')
+                            ->sortable()
+                            ->default(1)
+                            ->textAlign('center')
+                            ->rules('required', 'numeric', 'min:0', 'max:255'),
+                    ];
+                })
         ];
     }
 
