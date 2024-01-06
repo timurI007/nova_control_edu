@@ -138,7 +138,7 @@ class Lesson extends Resource
             
             BelongsTo::make('Room', 'room')
                 ->relatableQueryUsing(function (NovaRequest $request, Builder $query) {
-                    $query->where('status', 0);
+                    $query->where('is_active', 1);
                 })
                 ->rules('required'),
 

@@ -19,7 +19,7 @@ class RoomFactory extends Factory
         return [
             'name' => fake()->unique()->randomNumber(3),
             'capacity' => random_int(15, 20),
-            'status' => random_int(0, 1)
+            'is_active' => random_int(0, 1)
         ];
     }
 }

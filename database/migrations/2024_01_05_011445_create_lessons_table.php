@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('group_id');
             $table->unsignedBigInteger('room_id');
             $table->integer('weekday');
+            $table->unsignedTinyInteger('is_actual')->default(1);
             $table->time('starts_at');
             $table->time('ends_at');
             $table->timestamps();

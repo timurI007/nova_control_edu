@@ -73,7 +73,7 @@ class Student extends Resource
                 ->modalSize('3xl')
                 ->rules('required')
                 ->creationRules('unique:students,user_id')
-                ->updateRules('unique:students,user_id,{{resourceId}}')
+                ->hideWhenUpdating()
                 ->showCreateRelationButton(),
             
             Text::make('Contacts', function () {

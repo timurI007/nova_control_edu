@@ -137,12 +137,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                     MenuItem::resource(Position::class),
                 ])->icon('user-group')->collapsable(),
 
-                MenuSection::make('Lessons Schedule', [
-                    MenuItem::resource(TodaysLesson::class),
-                    MenuItem::resource(Lesson::class),
-                    MenuItem::resource(Room::class),
-                ])->icon('calendar')->collapsable(),
-
                 MenuSection::make('Educational Part', [
                     MenuItem::resource(Teacher::class),
                     MenuItem::resource(Student::class),
@@ -153,6 +147,12 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                         MenuItem::lens(Teacher::class, TeacherStudents::class),
                     ])->collapsable(),
                 ])->icon('academic-cap')->collapsable(),
+
+                MenuSection::make('Lessons Schedule', [
+                    MenuItem::resource(TodaysLesson::class),
+                    MenuItem::resource(Lesson::class),
+                    MenuItem::resource(Room::class),
+                ])->icon('calendar')->collapsable(),
                 
                 MenuSection::make('Departments', $result_departments)
                     ->icon('template')

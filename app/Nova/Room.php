@@ -56,18 +56,24 @@ class Room extends Resource
                 ->rules('required', 'numeric', 'min:0')
                 ->textAlign('left'),
             
-            Badge::make('Status')
-                ->map(GlobalVariable::get_room_styles_optional())
-                ->label(function ($value) {
-                    return GlobalVariable::$rooms_labels[$value];
+            Badge::make('Is Active', 'is_active')
+                ->map([
+                    0 => 'danger',
+                    1 => 'success'
+                ])
+                ->label(function ($is_active) {
+                    return $is_active ? 'Active' : 'Not Active';
                 })
                 ->filterable()
                 ->withIcons()
                 ->textAlign('left'),
             
-            Select::make('Status')
-                ->options(GlobalVariable::get_room_status_optional())
-                ->default(GlobalVariable::$rooms_status[0])
+            Select::make('Is Active', 'is_active')
+                ->options([
+                    0 => 'Not Active',
+                    1 => 'Active'
+                ])
+                ->default(1)
                 ->onlyOnForms()
                 ->rules('required'),
             
