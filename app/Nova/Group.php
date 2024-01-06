@@ -3,10 +3,12 @@
 namespace App\Nova;
 
 use App\Classes\GlobalVariable;
+use App\Models\GroupStudent;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Badge;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -20,6 +22,18 @@ class Group extends Resource
      * @var class-string<\App\Models\Group>
      */
     public static $model = \App\Models\Group::class;
+
+    /**
+     * Build an "index" query for the given resource.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        return $query->withCount('students');
+    }
 
     /**
      * Get the value that should be displayed to represent the resource.
@@ -84,7 +98,7 @@ class Group extends Resource
 
             BelongsTo::make('Teacher')
                 ->rules('required')
-                ->searchable()                
+                ->searchable()
                 ->withSubtitles()
                 ->filterable(),
             
@@ -108,10 +122,16 @@ class Group extends Resource
             
             Number::make('Number Of Students', 'students_count')
                 ->sortable()
-                ->exceptOnForms()
+                ->onlyOnIndex()
                 ->textAlign('left'),
             
-            BelongsToMany::make('Students', 'students', Student::class)
+            Number::make('Number Of Students', function () {
+                return $this->students->count();
+            })->onlyOnDetail(),
+            
+            BelongsToMany::make('Students', 'students', Student::class),
+
+            HasMany::make('Lessons', 'lessons', Lesson::class)
         ];
     }
 

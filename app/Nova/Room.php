@@ -6,6 +6,7 @@ use App\Classes\GlobalVariable;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Badge;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Fields\Text;
@@ -69,6 +70,8 @@ class Room extends Resource
                 ->default(GlobalVariable::$rooms_status[0])
                 ->onlyOnForms()
                 ->rules('required'),
+            
+            HasMany::make('Lessons', 'lessons', Lesson::class),
             
             BelongsToMany::make('Equipment', 'equipment', Equipment::class)
                 ->fields(function ($request, $relatedModel) {

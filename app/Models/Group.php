@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Group extends Model
 {
@@ -18,6 +19,8 @@ class Group extends Model
      * @var string
      */
     protected $table = 'groups';
+
+    protected $appends = ['students_count'];
 
     // Relationships
 
@@ -36,10 +39,8 @@ class Group extends Model
         return $this->belongsTo(Course::class, 'course_id');
     }
 
-    // Detail attributes
-    
-    public function getStudentsCountAttribute()
+    public function lessons(): HasMany
     {
-        return $this->students()->count();
+        return $this->hasMany(Lesson::class, 'group_id');
     }
 }

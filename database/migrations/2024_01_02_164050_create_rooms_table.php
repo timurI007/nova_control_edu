@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 30)->unique();
             $table->unsignedInteger('capacity');
-            $table->unsignedTinyInteger('status')->default(1);
+            $table->unsignedTinyInteger('status')->default(0);
             $table->timestamps();
         });
     }

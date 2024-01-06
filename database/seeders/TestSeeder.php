@@ -20,10 +20,12 @@ class TestSeeder extends Seeder
         $departments = $this->getDepartments();
         $positions = $this->getPositions();
         $courses = $this->getCourses();
+        $equipment = $this->getEquipment();
 
         // Saving
 
         // \App\Models\User::factory()->count(20)->create();
+        // saving defined
         foreach ($departments as $department){
             \App\Models\Department::factory()->create($department);
         }
@@ -33,6 +35,21 @@ class TestSeeder extends Seeder
         foreach ($courses as $course){
             \App\Models\Course::factory()->create($course);
         }
+        $chair = \App\Models\Equipment::factory()->create($equipment[0]);
+        $table = \App\Models\Equipment::factory()->create($equipment[1]);
+        // rooms equipment
+        \App\Models\Room::factory()->count(10)->hasAttached(
+            $chair,
+            [
+                'amount' => 15
+            ],
+        )->hasAttached(
+            $table,
+            [
+                'amount' => 7
+            ]
+        )->create();
+        // teachers groups students
         \App\Models\Staff::factory()->count(10)->create([
             'position_id' => 1,
             'department_id' => 1
@@ -66,6 +83,19 @@ class TestSeeder extends Seeder
             ],
             [
                 'name' => 'Admin'
+            ],
+        );
+    }
+
+    function getEquipment() : array {
+        return array(
+            [
+                'id' => 1,
+                'name' => 'Chair'
+            ],
+            [
+                'id' => 2,
+                'name' => 'Table'
             ],
         );
     }

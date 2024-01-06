@@ -8,8 +8,8 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Fields\Badge;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\BelongsTo;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
+// use Illuminate\Support\Facades\Validator;
+// use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Markdown;
@@ -143,7 +143,7 @@ class Staff extends Resource
      */
     public function fieldsForIndex(NovaRequest $request)
     {
-        $date_of_week = date('w');
+        $day_of_week = date('w');
         $current_time = date('H:i');
         return [
             UserFields::userID()->textAlign('left'),
@@ -157,8 +157,8 @@ class Staff extends Resource
             BelongsTo::make('Department', 'department', Department::class)
                 ->filterable(),
             
-            Boolean::make('Is Working Time', function() use ($date_of_week, $current_time){
-                switch($date_of_week){
+            Boolean::make('Is Working Time', function() use ($day_of_week, $current_time){
+                switch($day_of_week){
                     case 0: return GlobalVariable::getIsWorkTime($this->working_hours['sunday'], $current_time); break;
                     case 1: return GlobalVariable::getIsWorkTime($this->working_hours['monday'], $current_time); break;
                     case 2: return GlobalVariable::getIsWorkTime($this->working_hours['tuesday'], $current_time); break;

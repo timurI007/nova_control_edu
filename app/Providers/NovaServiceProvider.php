@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Classes\GlobalVariable;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Laravel\Nova\Nova;
@@ -17,10 +18,13 @@ use App\Nova\Position;
 use App\Nova\Staff;
 use App\Nova\Department;
 use App\Nova\Equipment;
+use App\Nova\Filters\WeekDay;
 use App\Nova\Lenses\TeacherStudents;
+use App\Nova\Lesson;
 use App\Nova\Room;
 use App\Nova\Student;
 use App\Nova\Teacher;
+use App\Nova\TodaysLesson;
 use App\Nova\User;
 use Laravel\Nova\Menu\MenuGroup;
 
@@ -132,6 +136,12 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                     MenuItem::resource(Department::class),
                     MenuItem::resource(Position::class),
                 ])->icon('user-group')->collapsable(),
+
+                MenuSection::make('Lessons Schedule', [
+                    MenuItem::resource(TodaysLesson::class),
+                    MenuItem::resource(Lesson::class),
+                    MenuItem::resource(Room::class),
+                ])->icon('calendar')->collapsable(),
 
                 MenuSection::make('Educational Part', [
                     MenuItem::resource(Teacher::class),
